@@ -1,0 +1,6 @@
+<?php
+
+return array (
+    'meetup_api_key' => 'YOUR_API_KEY',
+    'group_urlname' => 'unified-diff',
+);
