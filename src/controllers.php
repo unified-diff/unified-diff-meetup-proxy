@@ -5,9 +5,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use DMS\Service\Meetup\MeetupKeyAuthClient;
 
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html', array());
+$app->get('/events.json', function () use ($app) {
+    $client = MeetupKeyAuthClient::factory(
+        array(
+            'key' => $app['config']['meetup_api_key']
+        )
+    );
+
+    $response = $client->getEvents(
+        array(
+            'group_urlname' => $app['config']['group_urlname']
+        )
+    );
+
+    return new JsonResponse($response->toArray());
+
 })
 ->bind('homepage')
 ;
