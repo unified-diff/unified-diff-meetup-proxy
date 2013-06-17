@@ -16,14 +16,34 @@ $app->get('/events.json', function () use ($app) {
 
     $response = $client->getEvents(
         array(
-            'group_urlname' => $app['config']['group_urlname']
+            'group_urlname' => $app['config']['group_urlname'],
+            'status' => 'past'
         )
     );
 
-    return new JsonResponse($response->toArray());
+    return new JsonResponse($response->toArray(), 200, array('Access-Control-Allow-Origin' => '*'));
 
 })
-->bind('homepage')
+->bind('events')
+;
+
+$app->get('/rsvps/{id}.json', function (Silex\Application $app, $id) use ($app) {
+        $client = MeetupKeyAuthClient::factory(
+            array(
+                'key' => $app['config']['meetup_api_key']
+            )
+        );
+
+        $response = $client->getRSVPs(
+            array(
+                'event_id' => $id
+            )
+        );
+
+        return new JsonResponse($response->toArray(), 200, array('Access-Control-Allow-Origin' => '*'));
+
+    })
+    ->bind('rsvps')
 ;
 
 $app->error(function (\Exception $e, $code) use ($app) {
