@@ -16,8 +16,7 @@ $app->get('/events.json', function () use ($app) {
 
     $response = $client->getEvents(
         array(
-            'group_urlname' => $app['config']['group_urlname'],
-            'status' => 'past'
+            'group_urlname' => $app['config']['group_urlname']
         )
     );
 
